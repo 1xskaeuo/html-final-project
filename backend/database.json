@@ -1,0 +1,76 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "demo",
+      "email": "demo@example.com",
+      "password": "$2a$10$yKEz7y0gWJv/R2QSKzdCp.9sninhmGYCWquRCtWc6YH.0fCqzNqdW",
+      "createdAt": "2025-11-27T16:04:26.695Z"
+    },
+    {
+      "id": 2,
+      "username": "admin",
+      "email": "admin@mail.ru",
+      "password": "$2a$10$c1DF.sIGdH8qFN0BXvuZD.b/6sHc6M7o9f6v1Dz4kKuLEDTUN4sm6",
+      "createdAt": "2025-11-27T16:04:55.698Z"
+    },
+    {
+      "id": 3,
+      "username": "admin1",
+      "email": "admin1@mail.ru",
+      "password": "$2a$10$UsmoQph4V.Tt8ecFYiDime4Y1.O3jgv9PNtZ5ixqRBRN5oAknj/oe",
+      "createdAt": "2025-11-27T16:13:18.420Z"
+    }
+  ],
+  "games": [
+    {
+      "id": 1,
+      "userId": 2,
+      "score": 147,
+      "time": 13,
+      "level": 1,
+      "date": "2025-11-27T16:05:25.376Z"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "score": 441,
+      "time": 33,
+      "level": 2,
+      "date": "2025-11-27T16:06:01.014Z"
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "score": 828,
+      "time": 71,
+      "level": 3,
+      "date": "2025-11-27T16:07:17.964Z"
+    },
+    {
+      "id": 4,
+      "userId": 3,
+      "score": 147,
+      "time": 13,
+      "level": 1,
+      "date": "2025-11-27T16:13:43.432Z"
+    },
+    {
+      "id": 5,
+      "userId": 3,
+      "score": 427,
+      "time": 40,
+      "level": 2,
+      "date": "2025-11-27T16:14:25.807Z"
+    },
+    {
+      "id": 6,
+      "userId": 2,
+      "score": 145,
+      "time": 15,
+      "level": 1,
+      "date": "2025-11-27T16:52:39.915Z"
+    }
+  ],
+  "lastSave": "2025-11-27T16:52:39.915Z"
+}

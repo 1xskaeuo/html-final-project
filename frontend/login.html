@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game - Вход</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>Вход в аккаунт</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Войти</button>
+            </form>
+            <p class="non-acc">Нет аккаунта? <a href="register.html">Зарегистрируйтесь</a></p>
+            <p><a href="index.html">← На главную</a></p>
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    <script src="auth.js"></script>
+    <script src="theme.js"></script>
+</body>
+</html>

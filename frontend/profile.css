@@ -1,0 +1,84 @@
+/* Стили для профиля */
+.profile-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-card, .stats-card, .history-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.user-info p {
+    margin: 15px 0;
+    font-size: 1.1em;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.stat-item h3 {
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.stat-item span {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.games-history {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.game-record {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.game-record.win {
+    border-left-color: #4CAF50;
+}
+
+.game-info {
+    display: flex;
+    gap: 20px;
+}
+
+.game-stat {
+    text-align: center;
+}
+
+.game-stat .label {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.game-stat .value {
+    font-weight: bold;
+    font-size: 1.1em;
+}

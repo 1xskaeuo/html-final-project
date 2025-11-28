@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game - Игра</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Memory Game</h1>
+            <nav>
+                <button id="theme-toggle">🌙</button>
+                <button onclick="location.href='index.html'">Главная</button>
+                <button onclick="location.href='profile.html'">Профиль</button>
+                <button id="logout-btn">Выйти</button>
+            </nav>
+        </header>
+
+        <div class="game-info">
+            <div class="score">Счет: <span id="score">0</span></div>
+            <div class="timer">Время: <span id="timer">0</span>с</div>
+            <div class="level">Уровень: <span id="level">1</span></div>
+            <button id="restart">Новая игра</button>
+        </div>
+        <div id="game-board" class="game-board"></div>
+        
+        <div id="auth-required" style="display: none; text-align: center; padding: 40px;">
+            <h2>Требуется авторизация</h2>
+            <p>Для игры необходимо войти в аккаунт</p>
+            <button onclick="location.href='login.html'" class="btn-primary">Войти</button>
+            <button onclick="location.href='register.html'" class="btn-secondary">Регистрация</button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        // Управление темой и авторизацией для страницы игры
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Инициализация страницы игры...');
+            
+            // Инициализация темы
+            initTheme();
+            
+            // Проверка авторизации
+            checkGameAuth();
+            
+            // Инициализация обработчиков
+            initEventHandlers();
+        });
+
+        function initTheme() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) {
+                console.error('Кнопка темы не найдена!');
+                return;
+            }
+            
+            // Загрузка сохраненной темы
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            body.setAttribute('data-theme', savedTheme);
+            themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            
+            console.log('Тема инициализирована:', savedTheme);
+        }
+
+        function initEventHandlers() {
+            // Обработчик кнопки темы
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    console.log('Клик по кнопке темы в игре');
+                    const body = document.body;
+                    const currentTheme = body.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    
+                    body.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    this.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                    
+                    console.log('Тема изменена на:', newTheme);
+                });
+            }
+            
+            // Обработчик выхода
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    localStorage.removeItem('token');
+                    window.location.href = 'index.html';
+                });
+            }
+        }
+
+        async function checkGameAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showAuthRequired();
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    localStorage.removeItem('token');
+                    showAuthRequired();
+                    return;
+                }
+                
+                // Если авторизация успешна, запускаем игру
+                console.log('Авторизация успешна, запуск игры...');
+                startGame();
+            } catch (error) {
+                console.error('Ошибка проверки авторизации:', error);
+                showAuthRequired();
+            }
+        }
+
+        function showAuthRequired() {
+            document.querySelector('.game-info').style.display = 'none';
+            document.getElementById('game-board').style.display = 'none';
+            document.getElementById('auth-required').style.display = 'block';
+        }
+
+        function startGame() {
+            document.querySelector('.game-info').style.display = 'flex';
+            document.getElementById('game-board').style.display = 'grid';
+            document.getElementById('auth-required').style.display = 'none';
+            
+            // Запуск игры
+            window.game = new MemoryGame();
+        }
+    </script>
+    <script src="chatbot.js"></script>
+</body>
+</html>
