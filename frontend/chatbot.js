@@ -1,4 +1,3 @@
-// chatbot.js
 class ChatBot {
     constructor() {
         this.isOpen = false;
@@ -35,8 +34,7 @@ class ChatBot {
             this.chatContainer.querySelector('.chatbot-messages').style.background = '#1e293b';
             this.chatContainer.querySelector('.chatbot-quick-buttons').style.background = '#0f172a';
             this.chatContainer.querySelector('.chatbot-quick-buttons').style.borderColor = '#334155';
-            
-            // Обновляем кнопки
+
             const quickButtons = this.chatContainer.querySelectorAll('.chatbot-quick-button');
             quickButtons.forEach(btn => {
                 btn.style.background = '#334155';
@@ -49,8 +47,7 @@ class ChatBot {
             this.chatContainer.querySelector('.chatbot-messages').style.background = 'white';
             this.chatContainer.querySelector('.chatbot-quick-buttons').style.background = '#f8fafc';
             this.chatContainer.querySelector('.chatbot-quick-buttons').style.borderColor = '#e2e8f0';
-            
-            // Обновляем кнопки
+
             const quickButtons = this.chatContainer.querySelectorAll('.chatbot-quick-button');
             quickButtons.forEach(btn => {
                 btn.style.background = 'white';
@@ -61,7 +58,7 @@ class ChatBot {
     }
 
     setupThemeObserver() {
-        // Следим за изменениями темы
+
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.attributeName === 'data-theme') {
@@ -78,7 +75,7 @@ class ChatBot {
     }
 
     createChatBot() {
-        // Создаем контейнер чат-бота
+
         this.chatContainer = document.createElement('div');
         this.chatContainer.className = 'chatbot-container';
         this.chatContainer.innerHTML = `
@@ -92,25 +89,21 @@ class ChatBot {
             <div class="chatbot-quick-buttons"></div>
         `;
 
-        // Создаем кнопку открытия чата
         this.chatButton = document.createElement('div');
         this.chatButton.className = 'chatbot-button';
         this.chatButton.innerHTML = '🤖';
-        
-        // Добавляем в body
+
         document.body.appendChild(this.chatButton);
         document.body.appendChild(this.chatContainer);
 
-        // Назначаем обработчики событий
         this.setupEventListeners();
         this.createQuickButtons();
     }
 
     setupEventListeners() {
-        // Кнопка открытия/закрытия чата
+
         this.chatButton.addEventListener('click', () => this.toggleChat());
-        
-        // Кнопка закрытия чата
+
         this.chatContainer.querySelector('.chatbot-close').addEventListener('click', () => this.closeChat());
     }
 
@@ -312,7 +305,6 @@ class ChatBot {
     }
 }
 
-// Инициализация чат-бота при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     window.chatBot = new ChatBot();
 });

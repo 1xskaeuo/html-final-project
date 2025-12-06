@@ -36,17 +36,13 @@
     
     <script src="script.js"></script>
     <script>
-        // Управление темой и авторизацией для страницы игры
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Инициализация страницы игры...');
-            
-            // Инициализация темы
+
             initTheme();
-            
-            // Проверка авторизации
+
             checkGameAuth();
-            
-            // Инициализация обработчиков
+
             initEventHandlers();
         });
 
@@ -58,8 +54,7 @@
                 console.error('Кнопка темы не найдена!');
                 return;
             }
-            
-            // Загрузка сохраненной темы
+
             const savedTheme = localStorage.getItem('theme') || 'light';
             body.setAttribute('data-theme', savedTheme);
             themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
@@ -68,7 +63,7 @@
         }
 
         function initEventHandlers() {
-            // Обработчик кнопки темы
+
             const themeToggle = document.getElementById('theme-toggle');
             if (themeToggle) {
                 themeToggle.addEventListener('click', function() {
@@ -84,8 +79,7 @@
                     console.log('Тема изменена на:', newTheme);
                 });
             }
-            
-            // Обработчик выхода
+
             const logoutBtn = document.getElementById('logout-btn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function() {
@@ -114,8 +108,7 @@
                     showAuthRequired();
                     return;
                 }
-                
-                // Если авторизация успешна, запускаем игру
+
                 console.log('Авторизация успешна, запуск игры...');
                 startGame();
             } catch (error) {
@@ -134,8 +127,7 @@
             document.querySelector('.game-info').style.display = 'flex';
             document.getElementById('game-board').style.display = 'grid';
             document.getElementById('auth-required').style.display = 'none';
-            
-            // Запуск игры
+
             window.game = new MemoryGame();
         }
     </script>

@@ -1,4 +1,3 @@
-// theme.js - Единый менеджер темы для всех страниц
 class ThemeManager {
     constructor() {
         this.init();
@@ -11,22 +10,21 @@ class ThemeManager {
     }
 
     setupEventListeners() {
-        // Обработчик кнопки темы
+
         const themeToggle = document.getElementById('theme-toggle');
         if (themeToggle) {
             console.log('ThemeManager: кнопка темы найдена');
             
-            // Удаляем все существующие обработчики
+
             const newToggle = themeToggle.cloneNode(true);
             themeToggle.parentNode.replaceChild(newToggle, themeToggle);
             
-            // Добавляем новый обработчик
+
             document.getElementById('theme-toggle').addEventListener('click', () => {
                 this.toggleTheme();
             });
         }
 
-        // Обработчик выхода
         const logoutBtn = document.getElementById('logout-btn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => {
@@ -64,7 +62,7 @@ class ThemeManager {
     }
 }
 
-// Автоматическая инициализация на всех страницах
+
 if (document.getElementById('theme-toggle')) {
     document.addEventListener('DOMContentLoaded', () => {
         window.themeManager = new ThemeManager();

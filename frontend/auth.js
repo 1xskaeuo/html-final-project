@@ -1,7 +1,5 @@
-// Функции для авторизации
 const API_BASE = 'http://localhost:3000/api';
 
-// Проверка авторизации и управление интерфейсом
 async function checkAuth() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -31,7 +29,6 @@ async function checkAuth() {
     return false;
 }
 
-// Показать меню пользователя
 function showUserMenu(user) {
     const authButtons = document.getElementById('auth-buttons');
     const userMenu = document.getElementById('user-menu');
@@ -42,7 +39,6 @@ function showUserMenu(user) {
     if (username) username.textContent = user.username;
 }
 
-// Показать кнопки авторизации
 function showAuthButtons() {
     const authButtons = document.getElementById('auth-buttons');
     const userMenu = document.getElementById('user-menu');
@@ -51,63 +47,36 @@ function showAuthButtons() {
     if (userMenu) userMenu.style.display = 'none';
 }
 
-// Обновить интерфейс для авторизованного пользователя
 function updateUIForLoggedInUser() {
-    // Показать кнопку "Начать игру"
+
     const playButton = document.querySelector('.btn-primary');
     if (playButton) {
         playButton.style.display = 'inline-block';
-        playButton.textContent = 'Начать игру';
+        playButton.textContent = '🎮 Начать игру';
         playButton.onclick = () => location.href = 'game.html';
     }
-    
-    // Скрыть кнопку входа
+
     const loginButton = document.querySelector('.btn-secondary');
     if (loginButton) {
         loginButton.style.display = 'none';
     }
-    
-    // Обновить текст приветствия
-    const heroTitle = document.querySelector('.hero h2');
-    if (heroTitle) {
-        heroTitle.textContent = 'С возвращением!';
-    }
-    
-    const heroText = document.querySelector('.hero p');
-    if (heroText) {
-        heroText.textContent = 'Продолжайте тренировать память и улучшайте свои результаты!';
-    }
 }
 
-// Обновить интерфейс для гостя
 function updateUIForGuest() {
-    // Скрыть кнопку "Начать игру"
+
     const playButton = document.querySelector('.btn-primary');
     if (playButton) {
         playButton.style.display = 'none';
     }
-    
-    // Показать кнопку входа
+
     const loginButton = document.querySelector('.btn-secondary');
     if (loginButton) {
         loginButton.style.display = 'inline-block';
         loginButton.textContent = 'Войти в аккаунт';
         loginButton.onclick = () => location.href = 'login.html';
     }
-    
-    // Вернуть оригинальный текст
-    const heroTitle = document.querySelector('.hero h2');
-    if (heroTitle) {
-        heroTitle.textContent = 'Тренируйте память с нашей игрой!';
-    }
-    
-    const heroText = document.querySelector('.hero p');
-    if (heroText) {
-        heroText.textContent = 'Найдите все парные карточки за минимальное время';
-    }
 }
 
-// Регистрация
 document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('register-form');
     if (registerForm) {
@@ -143,8 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
-    // Вход
+
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', async function(e) {
@@ -178,18 +146,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
-    // Инициализация авторизации
+
     checkAuth();
 });
 
-// Выход
 function logout() {
     localStorage.removeItem('token');
     window.location.href = 'index.html';
 }
 
-// Показать сообщение
 function showMessage(text, type) {
     const messageDiv = document.getElementById('message');
     if (messageDiv) {

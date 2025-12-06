@@ -6,7 +6,10 @@
     <title>Memory Game - Главная</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
+
+
 <body>
     <div class="container">
         <header>
@@ -50,26 +53,38 @@
                     <p>Наблюдайте за своим развитием. Следите за улучшением памяти и скорости реакции со временем.</p>
                 </div>
             </section>
+
+            <section class="map-section">
+                <h2>Наше местоположение</h2>
+                <p>Ростов-на-Дону, ул. Текучёва, 139А</p>
+                
+                <div class="map-container">
+                    <div id="map" class="location-map"></div>
+                    <div class="map-info">
+                        <div class="map-info-card">
+                            <h3>Memory Game Headquarters</h3>
+                            <p><strong>Адрес:</strong> г. Ростов-на-Дону, ул. Текучёва, 139А</p>
+                            <p><strong>Координаты:</strong> 47.235075, 39.705473</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
     
     <script src="auth.js"></script>
     <script>
-        // Простой и надежный скрипт для темы на главной странице
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Страница загружена, инициализация темы...');
             
-            // Загрузка сохраненной темы
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.body.setAttribute('data-theme', savedTheme);
-            
-            // Установка иконки темы
+
             const themeToggle = document.getElementById('theme-toggle');
             if (themeToggle) {
                 console.log('Кнопка темы найдена');
                 themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-                
-                // Обработчик клика для темы
+
                 themeToggle.addEventListener('click', function() {
                     console.log('Клик по кнопке темы');
                     const body = document.body;
@@ -86,7 +101,6 @@
                 console.log('Кнопка темы не найдена!');
             }
             
-            // Обработчик выхода
             const logoutBtn = document.getElementById('logout-btn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function() {
@@ -98,5 +112,7 @@
     </script>
     <script src="theme.js"></script>
     <script src="chatbot.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="map.js"></script>
 </body>
 </html>

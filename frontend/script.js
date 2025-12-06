@@ -9,7 +9,7 @@ class MemoryGame {
         this.isPlaying = false;
         this.canFlip = true;
         this.level = 1;
-        this.maxLevel = 4; // 3x3, 4x4, 5x5, 6x6
+        this.maxLevel = 4; 
         
         this.init();
     }
@@ -41,15 +41,14 @@ class MemoryGame {
     createCardPairs() {
         const gridSize = this.getGridSize();
         const pairsNeeded = (gridSize * gridSize) / 2;
-        
-        // Выбираем нужное количество уникальных карточек
+
         const selectedCards = this.availableCards.slice(0, pairsNeeded);
         this.cards = [...selectedCards, ...selectedCards];
         this.shuffleCards();
     }
 
     getGridSize() {
-        // Уровень 1: 3x3, уровень 2: 4x4, уровень 3: 5x5, уровень 4: 6x6
+
         return this.level + 2;
     }
 
@@ -64,16 +63,13 @@ class MemoryGame {
         this.gameBoard.innerHTML = '';
         const gridSize = this.getGridSize();
         const pairsNeeded = (gridSize * gridSize) / 2;
-        
-        // Выбираем нужное количество уникальных карточек
+
         const selectedCards = this.availableCards.slice(0, pairsNeeded);
         this.cards = [...selectedCards, ...selectedCards];
         this.shuffleCards();
-        
-        // Обновляем CSS grid в зависимости от размера
+
         this.gameBoard.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
-        
-        // Настраиваем размер карточек и шрифта в зависимости от уровня
+
         const { cardSize, fontSize } = this.getCardSize();
         
         this.cards.forEach((card, index) => {
@@ -90,8 +86,7 @@ class MemoryGame {
             cardElement.addEventListener('click', () => this.flipCard(cardElement));
             this.gameBoard.appendChild(cardElement);
         });
-    
-        // Обновляем отображение уровня
+
         if (this.levelElement) {
             this.levelElement.textContent = this.level;
         }
@@ -99,13 +94,12 @@ class MemoryGame {
 
     getCardSize() {
         const gridSize = this.getGridSize();
-        
-        // Размеры карточек для разных уровней
+
         const sizes = {
-            3: { cardSize: '120px', fontSize: '2.5rem' },  // 3x3
-            4: { cardSize: '100px', fontSize: '2rem' },    // 4x4  
-            5: { cardSize: '85px', fontSize: '1.7rem' },   // 5x5
-            6: { cardSize: '75px', fontSize: '1.5rem' }    // 6x6
+            3: { cardSize: '120px', fontSize: '2.5rem' },  
+            4: { cardSize: '100px', fontSize: '2rem' },     
+            5: { cardSize: '85px', fontSize: '1.7rem' },   
+            6: { cardSize: '75px', fontSize: '1.5rem' }    
         };
         
         return sizes[gridSize] || sizes[4];
@@ -153,8 +147,7 @@ class MemoryGame {
         card2.style.animation = 'matchSuccess 0.6s ease-in-out';
         
         this.matchedPairs++;
-        
-        // Бонусные очки за уровень: базовые 10 + 5 за уровень
+
         const points = 10 + (this.level * 5);
         this.score += points;
         this.updateScore();
@@ -183,8 +176,6 @@ class MemoryGame {
         clearInterval(this.timer);
         this.isPlaying = false;
         this.canFlip = false;
-
-        // Бонус за время: чем быстрее, тем больше очков
         const timeBonus = Math.max(100 - this.time, 0) * this.level;
         this.score += timeBonus;
 
@@ -192,7 +183,7 @@ class MemoryGame {
 
         if (this.level < this.maxLevel) {
             setTimeout(() => {
-                if (confirm(`🎉 Уровень ${this.level} пройден!\n🏆 Вы получили бонус за время: +${timeBonus} очков\n\nПерейти на уровень ${this.level + 1}?`)) {
+                if (confirm(`Уровень ${this.level} пройден!\nВы получили бонус за время: +${timeBonus} очков\n\nПерейти на уровень ${this.level + 1}?`)) {
                     this.nextLevel();
                 } else {
                     this.showLevelComplete();
@@ -217,11 +208,11 @@ class MemoryGame {
     }
 
     showLevelComplete() {
-        alert(`🎊 Игра завершена на уровне ${this.level}!\n🏆 Итоговый счет: ${this.score}\n⏱️ Время: ${this.time} секунд`);
+        alert(`Игра завершена на уровне ${this.level}!\nИтоговый счет: ${this.score}\nВремя: ${this.time} секунд`);
     }
 
     showGameComplete() {
-        alert(`🏆 ПОБЕДА! Вы прошли все уровни!\n🎯 Финальный счет: ${this.score}\n⏱️ Общее время: ${this.time} секунд\n\nИгра завершена!`);
+        alert(`ПОБЕДА! Вы прошли все уровни!\nФинальный счет: ${this.score}\nОбщее время: ${this.time} секунд\n\nИгра завершена!`);
     }
 
     startGame() {
@@ -236,9 +227,35 @@ class MemoryGame {
     async saveScore() {
         try {
             const token = localStorage.getItem('token');
-            if (!token) return;
-
-            await fetch('http://localhost:3000/api/games', {
+            console.log('💾 Попытка сохранения игры...');
+            console.log('🔐 Токен в localStorage:', token ? '✅ Есть' : '❌ Нет');
+            
+            if (!token) {
+                console.log('⚠️ Пользователь не залогинен, результат не сохраняется');
+                return;
+            }
+    
+            // Проверяем токен перед отправкой
+            console.log('🔍 Проверка токена перед отправкой:', {
+                length: token.length,
+                first50: token.substring(0, 50) + '...'
+            });
+    
+            // Декодируем токен для отладки
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                console.log('📋 ID пользователя из токена:', payload.id);
+            } catch (e) {
+                console.error('❌ Ошибка декодирования токена:', e);
+            }
+    
+            console.log('📤 Отправка результата игры:', {
+                score: this.score,
+                time: this.time,
+                level: this.level
+            });
+            
+            const response = await fetch('http://localhost:3000/api/games', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -250,8 +267,20 @@ class MemoryGame {
                     level: this.level
                 })
             });
+    
+            const data = await response.json();
+            console.log('📥 Ответ сервера:', data);
+            
+            if (!response.ok) {
+                console.error('❌ Ошибка сохранения:', data.error || data.details);
+                throw new Error(data.error || 'Ошибка сохранения');
+            }
+            
+            console.log('✅ Игра успешно сохранена! ID:', data.game?.id);
         } catch (error) {
-            console.error('Error saving score:', error);
+            console.error('❌ Error saving score:', error);
+            // Можно показать пользователю уведомление
+            // alert('Не удалось сохранить результат: ' + error.message);
         }
     }
 

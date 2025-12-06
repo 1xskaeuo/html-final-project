@@ -1,10 +1,9 @@
-/* Современные шрифты и переменные */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Светлая тема - современная пастельная палитра */
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  --primary-gradient: linear-gradient(135deg, #320c3a 0%, #28414d 100%);
   --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
   --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
@@ -31,8 +30,8 @@
 }
 
 [data-theme="dark"] {
-  /* Темная тема - глубокие насыщенные цвета */
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  --primary-gradient: linear-gradient(135deg, #702080 0%, #22355e 100%);
   --secondary-gradient: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
   --accent-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
   --success-gradient: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
@@ -53,7 +52,6 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
 }
 
-/* Базовые стили */
 * {
   margin: 0;
   padding: 0;
@@ -69,7 +67,6 @@ body {
   min-height: 100vh;
 }
 
-/* Контейнеры и layout */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -80,7 +77,6 @@ body {
   align-items: center;
 }
 
-/* Заголовки */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
@@ -107,7 +103,7 @@ h3 {
   color: var(--text-primary);
 }
 
-/* Хедер и навигация */
+
 header {
   display: flex;
   justify-content: space-between;
@@ -165,7 +161,7 @@ nav button:hover {
   box-shadow: var(--shadow-lg);
 }
 
-/* Главная страница */
+
 .main-content {
   text-align: center;
 }
@@ -237,7 +233,7 @@ nav button:hover {
   box-shadow: var(--shadow-md);
 }
 
-/* Карточки фич */
+
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -275,7 +271,7 @@ nav button:hover {
   line-height: 1.6;
 }
 
-/* Игровое поле */
+
 .game-info {
   display: flex;
   justify-content: space-between;
@@ -329,7 +325,7 @@ nav button:hover {
     align-items: center;
 }
 
-/* Карточки игры */
+
 .card {
     background: var(--primary-gradient);
     border-radius: var(--radius-lg);
@@ -363,7 +359,7 @@ nav button:hover {
     box-shadow: 0 0 20px rgba(67, 233, 123, 0.4);
 }
 
-/* Стороны карточек */
+
 .card .front,
 .card .back {
     position: absolute;
@@ -389,7 +385,7 @@ nav button:hover {
     box-shadow: inset 0 0 0 2px var(--border-light);
 }
 
-/* Анимации */
+
 @keyframes matchSuccess {
     0% {
         transform: rotateY(180deg) scale(1);
@@ -412,7 +408,7 @@ nav button:hover {
     }
 }
 
-/* Анимация переворота */
+
 .card.flipped {
     animation: flipCard 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
@@ -444,18 +440,18 @@ nav button:hover {
     }
 }
 
-/* Отключаем hover во время анимаций */
+
 .card.flipped,
 .card.matched {
     pointer-events: none;
 }
 
-/* Восстанавливаем pointer-events после анимации */
+
 .card:not(.flipped):not(.matched) {
     pointer-events: auto;
 }
 
-/* Профиль и статистика */
+
 .profile-content {
   max-width: 900px;
   margin: 0 auto;
@@ -576,7 +572,7 @@ nav button:hover {
   color: var(--text-primary);
 }
 
-/* Адаптивность */
+
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
@@ -669,7 +665,7 @@ nav button:hover {
   }
 }
 
-/* Анимации */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -685,7 +681,6 @@ nav button:hover {
   animation: fadeIn 0.6s ease-out;
 }
 
-/* Кастомный скроллбар */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -704,7 +699,7 @@ nav button:hover {
   background: var(--secondary-gradient);
 }
 
-/* Сообщение о необходимости авторизации */
+
 #auth-required {
   background: var(--bg-glass);
   padding: 3rem;
@@ -726,42 +721,42 @@ nav button:hover {
   margin-bottom: 2rem;
 }
 
-/* Улучшенные состояния для карточек */
+
 .card.matched .front {
   background: var(--success-gradient);
   color: white;
   box-shadow: none;
 }
 
-/* Плавные переходы для всех интерактивных элементов */
+
 button, .card, .feature-card, .profile-card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Улучшенные фокус-стили для доступности */
+
 button:focus, .card:focus {
   outline: 2px solid #667eea;
   outline-offset: 2px;
 }
 
-/* Loading states */
+
 .loading {
   opacity: 0.7;
   pointer-events: none;
 }
 
-/* Success states */
+
 .success {
   background: var(--success-gradient) !important;
   color: white !important;
 }
 
-/* Error states */
+
 .error {
   background: var(--secondary-gradient) !important;
   color: white !important;
 }
-/* Добавьте в секцию .game-info */
+
 .game-info {
     display: flex;
     justify-content: space-between;
@@ -785,7 +780,7 @@ button:focus, .card:focus {
     gap: 0.5rem;
 }
 
-/* Адаптируем игровое поле для разных размеров */
+
 .game-board {
     display: grid;
     gap: 0.8rem;
@@ -796,10 +791,10 @@ button:focus, .card:focus {
     box-shadow: var(--shadow-lg);
     backdrop-filter: blur(10px);
     border: 1px solid var(--border-light);
-    max-width: 800px; /* Увеличиваем максимальную ширину */
+    max-width: 800px; 
 }
 
-/* Базовые стили карточек с адаптацией */
+
 .card {
     background: var(--primary-gradient);
     border-radius: var(--radius-lg);
@@ -807,15 +802,15 @@ button:focus, .card:focus {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2rem; /* Базовый размер шрифта */
+    font-size: 2rem; 
     transform-style: preserve-3d;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     box-shadow: var(--shadow-md);
-    aspect-ratio: 1; /* Сохраняем квадратную форму */
+    aspect-ratio: 1;
 }
 
-/* Адаптация для мобильных */
+
 @media (max-width: 768px) {
     .game-info {
         flex-wrap: wrap;
@@ -934,7 +929,7 @@ button:focus, .card:focus {
         min-height: 40px;
     }
 }
-/* Стили для таблицы лидеров */
+
 .leaderboard-card {
   background: var(--bg-glass);
   padding: 2.5rem;
@@ -979,7 +974,7 @@ button:focus, .card:focus {
 }
 
 .leaderboard-item:nth-child(3) {
-  border-left-color: #cd7f32; /* bronze */
+  border-left-color: #cd7f32; 
 }
 
 .leaderboard-rank {
@@ -1006,12 +1001,11 @@ button:focus, .card:focus {
   font-size: 0.9rem;
 }
 
-/* Добавьте в статистику отображение максимального уровня */
 .stat-item:nth-child(5) {
   grid-column: 1 / -1;
   max-width: 200px;
   margin: 0 auto;
-}/* Стили для кнопок быстрого доступа */
+}
 .chatbot-quick-buttons {
   display: flex;
   flex-direction: column;
@@ -1037,7 +1031,6 @@ button:focus, .card:focus {
   transform: translateX(5px) scale(0.98);
 }
 
-/* Адаптивность для кнопок */
 @media (max-width: 768px) {
   .chatbot-quick-buttons {
       max-height: 150px;
@@ -1049,17 +1042,16 @@ button:focus, .card:focus {
   }
 }
 
-/* Уменьшаем высоту чата чтобы вместить кнопки */
 .chatbot-container {
-  height: 550px; /* Увеличиваем высоту */
+  height: 550px; 
 }
 
 @media (max-width: 768px) {
   .chatbot-container {
-      height: 65vh; /* Увеличиваем для мобильных */
+      height: 65vh; 
   }
 }
-/* Стили для чат-бота с поддержкой тем */
+
 .chatbot-container {
   position: fixed;
   bottom: 100px;
@@ -1281,7 +1273,7 @@ button:focus, .card:focus {
   animation: bounce 2s infinite;
 }
 
-/* Адаптивность для мобильных */
+
 @media (max-width: 768px) {
   .chatbot-container {
       width: calc(100vw - 40px);
@@ -1302,7 +1294,7 @@ button:focus, .card:focus {
   }
 }
 
-/* Кастомный скроллбар для чата */
+
 .chatbot-messages::-webkit-scrollbar {
   width: 6px;
 }
@@ -1314,4 +1306,111 @@ button:focus, .card:focus {
 .chatbot-messages::-webkit-scrollbar-thumb {
   background: var(--primary-gradient);
   border-radius: 3px;
+}
+
+
+.map-section {
+  margin-top: 4rem;
+  padding: 3rem 0;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  text-align: center;
+}
+
+.map-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.map-section p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.map-container {
+  display: flex;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.location-map {
+  flex: 2;
+  height: 400px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  border: 2px solid var(--border-light);
+}
+
+.map-info {
+  flex: 1;
+}
+
+.map-info-card {
+  background: var(--bg-glass);
+  padding: 2rem;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-light);
+  text-align: left;
+}
+
+.map-info-card h3 {
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  font-size: 1.4rem;
+}
+
+.map-info-card p {
+  margin: 0.8rem 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.map-info-card strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 992px) {
+  .map-container {
+      flex-direction: column;
+  }
+  
+  .location-map {
+      height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-section {
+      padding: 2rem 1rem;
+  }
+  
+  .map-section h2 {
+      font-size: 2rem;
+  }
+  
+  .location-map {
+      height: 300px;
+  }
+  
+  .map-info-card {
+      padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .location-map {
+      height: 250px;
+  }
 }
