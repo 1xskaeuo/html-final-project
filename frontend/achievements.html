@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game - Достижения</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Достижения</h1>
+            <nav>
+                <button id="theme-toggle">🌙</button>
+                <button onclick="location.href='index.html'">Главная</button>
+                <button onclick="location.href='play.html'">Играть</button>
+                <button onclick="location.href='profile.html'">Профиль</button>
+                <button id="logout-btn">Выйти</button>
+            </nav>
+        </header>
+
+        <main class="achievements-content">
+
+            <div class="achievements-stats">
+                <div class="stat-card">
+                    <h3>Всего достижений</h3>
+                    <span id="total-achievements">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Выполнено</h3>
+                    <span id="completed-achievements">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Прогресс</h3>
+                    <span id="achievements-progress">0%</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Всего очков</h3>
+                    <span id="achievements-points">0</span>
+                </div>
+            </div>
+
+            <div class="achievements-filters">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="completed">Выполненные</button>
+                <button class="filter-btn" data-filter="locked">Не выполненные</button>
+                <button class="filter-btn" data-filter="in-progress">В процессе</button>
+            </div>
+
+            <div class="achievements-grid" id="achievements-list">
+                <div class="no-achievements">
+                    <h3>🎮 Начните играть!</h3>
+                    <p>Сыграйте первую игру, чтобы получить достижения</p>
+                    <button onclick="location.href='play.html'" class="btn-primary">Начать играть</button>
+                </div>
+            </div>
+
+            <div id="new-achievements-alert" class="hidden">
+                <h3>Новые достижения!</h3>
+                <div id="new-achievements-list"></div>
+                <button onclick="hideNewAchievements()">Закрыть</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        class AchievementsPage {
+            constructor() {
+                this.achievements = [];
+                this.filter = 'all';
+                this.init();
+            }
+
+            async init() {
+
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                await this.loadAchievements();
+                this.setupEventListeners();
+                this.setupTheme();
+                
+                setInterval(() => this.checkNewAchievements(), 30000);
+            }
+
+            setupTheme() {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.body.setAttribute('data-theme', savedTheme);
+                
+                const themeToggle = document.getElementById('theme-toggle');
+                if (themeToggle) {
+                    themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+                    themeToggle.addEventListener('click', () => this.toggleTheme());
+                }
+            }
+
+            toggleTheme() {
+                const body = document.body;
+                const currentTheme = body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                const themeToggle = document.getElementById('theme-toggle');
+                if (themeToggle) {
+                    themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                }
+            }
+
+            async loadAchievements() {
+                try {
+                    const token = localStorage.getItem('token');
+                    
+                    const response = await fetch('http://localhost:3000/api/achievements', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Получены достижения:', data);
+                        this.processAchievementsData(data);
+                    } else {
+                        console.error('Ошибка загрузки достижений:', response.status);
+                        this.showDemoAchievements();
+                    }
+                } catch (error) {
+                    console.error('Ошибка загрузки достижений:', error);
+                    this.showDemoAchievements();
+                }
+            }
+
+            processAchievementsData(data) {
+                if (data.achievements && Array.isArray(data.achievements)) {
+                    this.achievements = data.achievements;
+                    this.updateStats(data.stats || {});
+                    this.renderAchievements();
+                } else {
+                    this.showDemoAchievements();
+                }
+            }
+
+            showDemoAchievements() {
+
+                this.achievements = [
+                    {
+                        title: "Первая игра",
+                        description: "Сыграйте первую игру",
+                        icon: "🎮",
+                        points: 10,
+                        progress: 0,
+                        completed: false,
+                        key: "first_game"
+                    },
+                    {
+                        title: "Счет 100+",
+                        description: "Набрать 100 очков в одной игре",
+                        icon: "🏆",
+                        points: 20,
+                        progress: 0,
+                        completed: false,
+                        key: "score_100"
+                    },
+                    {
+                        title: "Уровень 3",
+                        description: "Достигнуть 3 уровня",
+                        icon: "🚀",
+                        points: 30,
+                        progress: 0,
+                        completed: false,
+                        key: "level_3"
+                    },
+                    {
+                        title: "Быстрее 30 сек",
+                        description: "Пройти уровень менее чем за 30 секунд",
+                        icon: "⚡",
+                        points: 40,
+                        progress: 0,
+                        completed: false,
+                        key: "fast_30"
+                    },
+                    {
+                        title: "10 игр",
+                        description: "Сыграть 10 игр",
+                        icon: "📊",
+                        points: 25,
+                        progress: 0,
+                        completed: false,
+                        key: "games_10"
+                    },
+                    {
+                        title: "Первая аркада",
+                        description: "Сыграть первую аркадную игру",
+                        icon: "🎯",
+                        points: 15,
+                        progress: 0,
+                        completed: false,
+                        key: "arcade_first"
+                    }
+                ];
+                
+                this.updateStats({ total: 6, completed: 0, totalProgress: 0 });
+                this.renderAchievements();
+            }
+
+            updateStats(stats) {
+                document.getElementById('total-achievements').textContent = stats.total || this.achievements.length;
+                document.getElementById('completed-achievements').textContent = stats.completed || 0;
+                
+                const progress = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+                document.getElementById('achievements-progress').textContent = progress + '%';
+                
+                const points = (stats.completed || 0) * 10 + Math.round((stats.totalProgress || 0) / 10);
+                document.getElementById('achievements-points').textContent = points;
+            }
+
+            renderAchievements() {
+                const container = document.getElementById('achievements-list');
+                const filtered = this.filterAchievements();
+                
+                if (filtered.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-achievements">
+                            <h3>🎮 Начните играть!</h3>
+                            <p>${this.getEmptyMessage()}</p>
+                            <button onclick="location.href='play.html'" class="btn-primary">Начать играть</button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = filtered.map(achievement => {
+                    let statusClass = 'locked';
+                    if (achievement.completed) {
+                        statusClass = 'completed';
+                    } else if (achievement.progress > 0) {
+                        statusClass = 'in-progress';
+                    }
+                    
+                    return `
+                        <div class="achievement-card ${statusClass}">
+                            <div class="achievement-icon">${achievement.icon}</div>
+                            <div class="achievement-info">
+                                <h3>${achievement.title}</h3>
+                                <p>${achievement.description}</p>
+                                <div class="achievement-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: ${achievement.progress}%"></div>
+                                    </div>
+                                    <span class="progress-text">${Math.round(achievement.progress)}%</span>
+                                </div>
+                                ${achievement.completed && achievement.unlockedAt ? 
+                                    `<div class="achievement-date">Разблокировано: ${new Date(achievement.unlockedAt).toLocaleDateString('ru-RU')}</div>` : 
+                                    ''
+                                }
+                            </div>
+                            <div class="achievement-points">${achievement.points} очков</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            filterAchievements() {
+                switch(this.filter) {
+                    case 'completed':
+                        return this.achievements.filter(a => a.completed);
+                    case 'locked':
+                        return this.achievements.filter(a => !a.completed && a.progress === 0);
+                    case 'in-progress':
+                        return this.achievements.filter(a => !a.completed && a.progress > 0);
+                    default:
+                        return this.achievements;
+                }
+            }
+
+            getEmptyMessage() {
+                switch(this.filter) {
+                    case 'completed':
+                        return 'У вас пока нет выполненных достижений';
+                    case 'locked':
+                        return 'Все достижения уже в процессе выполнения!';
+                    case 'in-progress':
+                        return 'У вас пока нет достижений в процессе выполнения';
+                    default:
+                        return 'Сыграйте первую игру, чтобы получить достижения';
+                }
+            }
+
+            async checkNewAchievements() {
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch('http://localhost:3000/api/achievements/check', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.unlocked && data.unlocked.length > 0) {
+                            this.showNewAchievements(data.unlocked);
+
+                            setTimeout(() => this.loadAchievements(), 1000);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Ошибка проверки достижений:', error);
+                }
+            }
+
+            showNewAchievements(unlocked) {
+                const alertDiv = document.getElementById('new-achievements-alert');
+                const listDiv = document.getElementById('new-achievements-list');
+                
+                listDiv.innerHTML = unlocked.map(achievement => `
+                    <div class="new-achievement">
+                        <span class="achievement-icon">${achievement.icon}</span>
+                        <span class="achievement-title">${achievement.title}</span>
+                        <span class="achievement-points">+${achievement.points} очков</span>
+                    </div>
+                `).join('');
+                
+                alertDiv.classList.remove('hidden');
+
+                setTimeout(() => {
+                    if (!alertDiv.classList.contains('hidden')) {
+                        this.hideNewAchievements();
+                    }
+                }, 10000);
+            }
+
+            hideNewAchievements() {
+                document.getElementById('new-achievements-alert').classList.add('hidden');
+            }
+
+            setupEventListeners() {
+
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.filter = e.target.dataset.filter;
+                        this.renderAchievements();
+                    });
+                });
+
+                document.getElementById('logout-btn').addEventListener('click', () => {
+                    localStorage.removeItem('token');
+                    window.location.href = 'index.html';
+                });
+
+                const themeToggle = document.getElementById('theme-toggle');
+                if (themeToggle) {
+                    themeToggle.addEventListener('click', () => this.toggleTheme());
+                }
+            }
+        }
+
+        function hideNewAchievements() {
+            document.getElementById('new-achievements-alert').classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            window.achievementsPage = new AchievementsPage();
+        });
+    </script>
+    <script src="chatbot.js"></script>
+</body>
+</html>

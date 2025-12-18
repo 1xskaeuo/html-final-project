@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game - Аркада</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Аркадный режим</h1>
+            <nav>
+                <button id="theme-toggle">🌙</button>
+                <button onclick="location.href='index.html'">Главная</button>
+                <button onclick="location.href='play.html'">Выбор режима</button>
+                <button onclick="location.href='profile.html'">Профиль</button>
+                <button onclick="location.href='achievements.html'">Достижения</button>
+                <button id="logout-btn">Выйти</button>
+            </nav>
+        </header>
+
+        <main class="arcade-content">
+            <div class="arcade-modes">
+                <div class="mode-card" data-mode="classic">
+                    <h3>Классическая аркада</h3>
+                    <p>2 минуты, максимум очков!</p>
+                    <p><small>Найдите как можно больше пар за 2 минуты</small></p>
+                    <button class="play-btn" data-mode="classic">Играть</button>
+                </div>
+                
+                <div class="mode-card" data-mode="moves">
+                    <h3>Ограниченные ходы</h3>
+                    <p>50 ходов, будьте точны!</p>
+                    <p><small>Каждый ход на счету</small></p>
+                    <button class="play-btn" data-mode="moves">Играть</button>
+                </div>
+                
+                <div class="mode-card" data-mode="survival">
+                    <h3>Режим выживания</h3>
+                    <p>Играйте пока не кончатся ходы</p>
+                    <p><small>Находите пары для получения дополнительных ходов</small></p>
+                    <button class="play-btn" data-mode="survival">Играть</button>
+                </div>
+            </div>
+
+            <div id="arcade-game" class="hidden">
+                <div class="arcade-game-info">
+                    <div class="arcade-timer">Время: <span id="arcade-time">120</span>с</div>
+                    <div class="arcade-score">Cчет: <span id="arcade-score">0</span></div>
+                    <div class="arcade-moves">Ходы: <span id="arcade-moves">0</span>/50</div>
+                    <button id="arcade-restart">Начать заново</button>
+                </div>
+                <div id="arcade-game-board" class="game-board"></div>
+            </div>
+
+            <div class="arcade-leaderboard">
+                <h2>Таблица лидеров аркады</h2>
+                <div class="leaderboard-tabs">
+                    <button class="tab-btn active" data-mode="classic">Классика</button>
+                    <button class="tab-btn" data-mode="moves">Ограниченные ходы</button>
+                    <button class="tab-btn" data-mode="survival">Выживание</button>
+                </div>
+                <div id="arcade-leaderboard-list" class="leaderboard-list">
+                    <div class="no-data">Загрузка...</div>
+                </div>
+            </div>
+
+            <div class="arcade-history">
+                <h2>Ваши последние игры</h2>
+                <div id="arcade-history-list">
+                    <div class="no-data">Загрузка...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Для игры в аркаду необходимо войти в аккаунт');
+                window.location.href = 'login.html';
+                return;
+            }
+    
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+                themeToggle.addEventListener('click', function() {
+                    const body = document.body;
+                    const currentTheme = body.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    
+                    body.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    this.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                });
+            }
+    
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    localStorage.removeItem('token');
+                    window.location.href = 'index.html';
+                });
+            }
+            
+            window.addEventListener('load', () => {
+                if (typeof ArcadeGame !== 'undefined') {
+                    window.arcadeGame = new ArcadeGame();
+                }
+            });
+        });
+    </script>
+    <script src="arcade-game.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+</html>

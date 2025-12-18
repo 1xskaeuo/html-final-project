@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game - Выберите режим</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Выберите режим игры</h1>
+            <nav>
+                <button id="theme-toggle">🌙</button>
+                <button onclick="location.href='index.html'">Главная</button>
+                <button onclick="location.href='profile.html'">Профиль</button>
+                <button onclick="location.href='achievements.html'">Достижения</button>
+                <button id="logout-btn">Выйти</button>
+            </nav>
+        </header>
+
+        <main class="play-content">
+            <div class="play-header">
+                <h2>Какой режим выберете сегодня?</h2>
+                <p>Каждый режим предлагает уникальный опыт игры</p>
+            </div>
+
+            <div class="game-modes-grid">
+                <div class="game-mode-card classic-mode">
+                    <div class="mode-content">
+                        <h3>Классический режим</h3>
+                        <p class="mode-description">
+                            Тренируйте память в спокойном темпе. 
+                            Проходите уровни, улучшайте свои результаты.
+                        </p>
+                        <div class="mode-features">
+                            <div class="feature">
+
+                                <span>Прогрессивные уровни</span>
+                            </div>
+                            <div class="feature">
+
+                                <span>Таблица рекордов</span>
+                            </div>
+                            <div class="feature">
+
+                                <span>Достижения</span>
+                            </div>
+                        </div>
+                        <button onclick="location.href='game.html'" class="play-mode-btn classic-btn">
+                            Играть в классику
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="game-mode-card arcade-mode">
+                    <div class="mode-content">
+                        <h3>Аркадный режим</h3>
+                        <p class="mode-description">
+                            Динамичная игра на скорость и точность. 
+                            Соревнуйтесь с другими игроками в разных режимах.
+                        </p>
+                        <div class="mode-features">
+                            <div class="feature">
+                                <span>Игра на время</span>
+                            </div>
+                            <div class="feature">
+
+                                <span>Ограниченные ходы</span>
+                            </div>
+                            <div class="feature">
+
+                                <span>Режим выживания</span>
+                            </div>
+                        </div>
+                        <button onclick="location.href='arcade.html'" class="play-mode-btn arcade-btn">
+                            Играть в аркаду
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-section">
+                <h2>Сравнение режимов</h2>
+                <div class="comparison-table">
+                    <div class="comparison-header">
+                        <div class="comparison-cell"></div>
+                        <div class="comparison-cell">Классика</div>
+                        <div class="comparison-cell">Аркада</div>
+                    </div>
+                    
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Цель игры</div>
+                        <div class="comparison-cell">Тренировка памяти</div>
+                        <div class="comparison-cell">Соревнование</div>
+                    </div>
+                    
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Темп игры</div>
+                        <div class="comparison-cell">Спокойный</div>
+                        <div class="comparison-cell">Динамичный</div>
+                    </div>
+                    
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Ограничения</div>
+                        <div class="comparison-cell">Уровни сложности</div>
+                        <div class="comparison-cell">Время/ходы</div>
+                    </div>
+                    
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Награды</div>
+                        <div class="comparison-cell">Достижения</div>
+                        <div class="comparison-cell">Таблицы лидеров</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-stats-section">
+                <h2>Ваша статистика</h2>
+                <div class="stats-cards">
+                    <div class="stats-card">
+                        <div class="stats-icon"></div>
+                        <div class="stats-content">
+                            <h4>Классический режим</h4>
+                            <div class="stats-values" id="classic-stats">
+                                <p>Загрузка статистики...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <div class="stats-icon"></div>
+                        <div class="stats-content">
+                            <h4>Аркадный режим</h4>
+                            <div class="stats-values" id="arcade-stats">
+                                <p>Загрузка статистики...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Для игры необходимо войти в аккаунт');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+                themeToggle.addEventListener('click', function() {
+                    const body = document.body;
+                    const currentTheme = body.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    
+                    body.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    this.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                });
+            }
+
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    localStorage.removeItem('token');
+                    window.location.href = 'index.html';
+                });
+            }
+
+            loadUserStats();
+        });
+
+        async function loadUserStats() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+
+                const classicResponse = await fetch('http://localhost:3000/api/user/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (classicResponse.ok) {
+                    const classicStats = await classicResponse.json();
+                    document.getElementById('classic-stats').innerHTML = `
+                        <p><strong>Лучший счет:</strong> ${classicStats.bestScore || 0}</p>
+                        <p><strong>Всего игр:</strong> ${classicStats.totalGames || 0}</p>
+                        <p><strong>Макс. уровень:</strong> ${classicStats.maxLevel || 1}</p>
+                    `;
+                }
+
+                const arcadeResponse = await fetch('http://localhost:3000/api/arcade/games', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (arcadeResponse.ok) {
+                    const arcadeGames = await arcadeResponse.json();
+                    if (arcadeGames.length > 0) {
+                        const bestScore = Math.max(...arcadeGames.map(g => g.score));
+                        const totalGames = arcadeGames.length;
+                        
+                        document.getElementById('arcade-stats').innerHTML = `
+                            <p><strong>Лучший счет:</strong> ${bestScore || 0}</p>
+                            <p><strong>Всего игр:</strong> ${totalGames}</p>
+                            <p><strong>Любимый режим:</strong> ${getFavoriteMode(arcadeGames)}</p>
+                        `;
+                    } else {
+                        document.getElementById('arcade-stats').innerHTML = `
+                            <p><strong>Вы еще не играли в аркаду</strong></p>
+                            <p>Попробуйте прямо сейчас!</p>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки статистики:', error);
+            }
+        }
+
+        function getFavoriteMode(games) {
+            if (!games.length) return 'Нет данных';
+            
+            const modeCount = {};
+            games.forEach(game => {
+                modeCount[game.mode] = (modeCount[game.mode] || 0) + 1;
+            });
+            
+            const favorite = Object.keys(modeCount).reduce((a, b) => 
+                modeCount[a] > modeCount[b] ? a : b
+            );
+            
+            const modeNames = {
+                'classic': 'Классика',
+                'moves': 'Ограниченные ходы',
+                'survival': 'Выживание'
+            };
+            
+            return modeNames[favorite] || favorite;
+        }
+    </script>
+    <script src="chatbot.js"></script>
+</body>
+</html>

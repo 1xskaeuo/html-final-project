@@ -59,9 +59,37 @@ class SQLiteDatabase {
         `);
 
         await this.db.exec(`
+            CREATE TABLE IF NOT EXISTS achievements (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                achievement_id TEXT NOT NULL,
+                unlocked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                progress INTEGER DEFAULT 0,
+                completed BOOLEAN DEFAULT FALSE,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                UNIQUE(user_id, achievement_id)
+            )
+        `);
+   
+        await this.db.exec(`
+            CREATE TABLE IF NOT EXISTS arcade_games (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                score INTEGER NOT NULL,
+                time INTEGER NOT NULL,
+                moves INTEGER NOT NULL,
+                mode TEXT NOT NULL,
+                played_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            )
+        `);
+    
+        await this.db.exec(`
             CREATE INDEX IF NOT EXISTS idx_games_user_id ON games(user_id);
             CREATE INDEX IF NOT EXISTS idx_games_played_at ON games(played_at);
             CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+            CREATE INDEX IF NOT EXISTS idx_achievements_user_id ON achievements(user_id);
+            CREATE INDEX IF NOT EXISTS idx_arcade_games_user_id ON arcade_games(user_id);
         `);
 
         console.log('📊 Таблицы базы данных созданы/проверены');
@@ -229,6 +257,105 @@ class SQLiteDatabase {
             console.log('Соединение с базой данных закрыто');
         }
     }
+
+async unlockAchievement(userId, achievementId, progress = 1) {
+    try {
+
+        const existing = await this.db.get(
+            `SELECT * FROM achievements WHERE user_id = ? AND achievement_id = ?`,
+            [userId, achievementId]
+        );
+
+        if (existing) {
+
+            await this.db.run(
+                `UPDATE achievements SET progress = ?, completed = ? WHERE user_id = ? AND achievement_id = ?`,
+                [progress, progress >= 100, userId, achievementId]
+            );
+        } else {
+
+            await this.db.run(
+                `INSERT INTO achievements (user_id, achievement_id, progress, completed) VALUES (?, ?, ?, ?)`,
+                [userId, achievementId, progress, progress >= 100]
+            );
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Ошибка разблокировки достижения:', error);
+        return false;
+    }
+}
+
+async getUserAchievements(userId) {
+    const achievements = await this.db.all(`
+        SELECT * FROM achievements 
+        WHERE user_id = ? 
+        ORDER BY unlocked_at DESC
+    `, [userId]);
+    
+    return achievements;
+}
+
+async getAchievementStats(userId) {
+    const stats = await this.db.get(`
+        SELECT 
+            COUNT(*) as total,
+            SUM(CASE WHEN completed = 1 THEN 1 ELSE 0 END) as completed,
+            SUM(CASE WHEN completed = 0 THEN progress ELSE 0 END) as total_progress
+        FROM achievements 
+        WHERE user_id = ?
+    `, [userId]);
+    
+    return {
+        total: stats?.total || 0,
+        completed: stats?.completed || 0,
+        totalProgress: stats?.total_progress || 0
+    };
+}
+
+async saveArcadeGame(userId, score, time, moves, mode = 'classic') {
+    const result = await this.db.run(
+        `INSERT INTO arcade_games (user_id, score, time, moves, mode) VALUES (?, ?, ?, ?, ?)`,
+        [userId, score, time, moves, mode]
+    );
+
+    const game = await this.db.get(
+        `SELECT * FROM arcade_games WHERE id = ?`,
+        result.lastID
+    );
+
+    console.log(`🎮 Аркадная игра сохранена (ID: ${game.id}, Режим: ${mode})`);
+    return game;
+}
+
+async getUserArcadeGames(userId, limit = 10) {
+    const games = await this.db.all(`
+        SELECT * FROM arcade_games 
+        WHERE user_id = ? 
+        ORDER BY played_at DESC 
+        LIMIT ?
+    `, [userId, limit]);
+    return games;
+}
+
+async getArcadeLeaderboard(mode = 'classic', limit = 10) {
+    const leaderboard = await this.db.all(`
+        SELECT 
+            u.id as userId,
+            u.username,
+            MAX(ag.score) as bestScore,
+            MIN(ag.time) as bestTime,
+            COUNT(ag.id) as totalGames
+        FROM users u
+        LEFT JOIN arcade_games ag ON u.id = ag.user_id AND ag.mode = ?
+        WHERE ag.score IS NOT NULL
+        GROUP BY u.id, u.username
+        ORDER BY bestScore DESC
+        LIMIT ?
+    `, [mode, limit]);
+    return leaderboard;
+}
 }
 
 const database = new SQLiteDatabase();

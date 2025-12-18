@@ -52,8 +52,8 @@ function updateUIForLoggedInUser() {
     const playButton = document.querySelector('.btn-primary');
     if (playButton) {
         playButton.style.display = 'inline-block';
-        playButton.textContent = '🎮 Начать игру';
-        playButton.onclick = () => location.href = 'game.html';
+        playButton.textContent = 'Начать игру';
+        playButton.onclick = () => location.href = 'play.html';
     }
 
     const loginButton = document.querySelector('.btn-secondary');
